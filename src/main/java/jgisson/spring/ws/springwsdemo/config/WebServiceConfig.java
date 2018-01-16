@@ -33,9 +33,24 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
+    @Bean(name = "documents")
+    public DefaultWsdl11Definition documentsWsdl11Definition(XsdSchema documentsSchema) {
+        DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
+        wsdl11Definition.setPortTypeName("DocumentsPort");
+        wsdl11Definition.setLocationUri("/ws/documents");
+        wsdl11Definition.setTargetNamespace("http://jgisson.spring.ws.springwsdemo.model.documents");
+        wsdl11Definition.setSchema(documentsSchema);
+        return wsdl11Definition;
+    }
+
     @Bean
     public XsdSchema countriesSchema() {
         return new SimpleXsdSchema(new ClassPathResource("countries.xsd"));
+    }
+
+    @Bean
+    public XsdSchema documentsSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("documents.xsd"));
     }
 
 }
