@@ -1,14 +1,16 @@
 package jgisson.spring.ws.springwsdemo.repository.documents;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 
 import jgisson.spring.ws.springwsdemo.model.Document;
 
@@ -21,13 +23,27 @@ public class DocumentRepository {
 
         boolean success = false;
 
+        InputStream in = null;
+        OutputStream out = null;
         try {
-            byte[] buf = Base64Utils.decode(doc.getContent());
-            File docFile = new File(STORE_PATH + File.separator + doc.getName());
-            FileUtils.writeByteArrayToFile(docFile, buf);
+            in = doc.getContent().getInputStream();
+            out = new FileOutputStream(STORE_PATH + File.separator + doc.getName());
+            IOUtils.copy(in, out);
+
             success = true;
         } catch (IOException e) {
             System.err.println("Can not store file " + doc.getName());
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException ioe) {
+                // Blank
+            }
         }
 
         return success;
@@ -38,15 +54,9 @@ public class DocumentRepository {
         Document doc = new Document();
         doc.setName("tests.pdf");
 
-        try {
-            InputStream in = new FileInputStream(STORE_PATH + File.separator + "tests.pdf");
-            byte[] buf = IOUtils.toByteArray(in);
-            byte[] buf64 = Base64Utils.encode(buf);
-            doc.setContent(buf64);
-        } catch (IOException e) {
-            System.err.println("Can not load file " + doc.getName() + ".");
-            doc.setContent(null);
-        }
+        FileDataSource fds = new FileDataSource(STORE_PATH + File.separator + "tests.pdf");
+        DataHandler contentHandler = new DataHandler(fds);
+        doc.setContent(contentHandler);
 
         return doc;
     }

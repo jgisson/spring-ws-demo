@@ -1,5 +1,6 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns:tns="http://jgisson.spring.ws.springwsdemo.model.documents"
+           xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
            targetNamespace="http://jgisson.spring.ws.springwsdemo.model.documents"
            elementFormDefault="qualified">
 
@@ -38,7 +39,7 @@
     <xs:complexType name="document">
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
-            <xs:element name="content" type="xs:base64Binary"/>
+            <xs:element name="content" type="xs:base64Binary"  xmime:expectedContentTypes="application/octet-stream" />
         </xs:sequence>
     </xs:complexType>
 
