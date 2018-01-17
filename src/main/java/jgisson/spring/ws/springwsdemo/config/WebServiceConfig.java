@@ -56,12 +56,12 @@ public class WebServiceConfig extends WsConfigurationSupport {
     /* XSD def */
     @Bean
     public XsdSchema countriesSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("countries.xsd"));
+        return new SimpleXsdSchema(new ClassPathResource("xsd/countries.xsd"));
     }
 
     @Bean
     public XsdSchema documentsSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("documents.xsd"));
+        return new SimpleXsdSchema(new ClassPathResource("xsd/documents.xsd"));
     }
 
     /* Marshaller def */
